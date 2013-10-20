@@ -1,0 +1,185 @@
+%D \module
+%D   [     file=t-overviewpage,
+%D      version=2013.08.31,
+%D        title=\CONTEXT\ User Module,
+%D     subtitle=Page Overviews,
+%D       author=Aditya Mahajan and Hans Hagen,
+%D         date=\currentdate,
+%D    copyright=Aditya Mahajan,
+%D        email=adityam <at> ieee <dot> org,
+%D      license=Simplified BSD License]
+
+\writestatus{loading}{Overview Page (ver: 2013.08.31)}
+
+% alternatively, when we bind only to sections we could check for a system state
+% *sectionname but that is less flexible
+
+\startmodule [overviewpage]
+
+\unprotect
+
+\setupmodule
+  [\c!level=]
+
+\installnamespace{overviewpage}
+
+\initializeboxstack{\????overviewpage}
+
+\newconditional\c_overviewpage_state
+
+\unexpanded\def\saveoverviewpage
+  {\global\settrue\c_overviewpage_state}
+
+\unexpanded\def\overviewpage_save_page#1%
+  {\ifconditional\c_overviewpage_state
+     \setbox\nextbox\hbox{#1}%
+     \setbox\scratchbox\copy\nextbox
+     \cleanupbox\scratchbox % remove nodes that should not be seen in the backend twice
+     \writestatus{overviewpage}{saving overviewpage \the\realpageno}%
+     \savebox{\????overviewpage}{\the\realpageno}{\box\scratchbox}%
+     \global\setfalse\c_overviewpage_state
+     \page_shipouts_normal{\box\nextbox}%
+   \else
+     \page_shipouts_normal{#1}%
+   \fi}
+
+\appendtoks
+    \doif {\headparameter{option:overviewpage}} \v!yes \saveoverviewpage
+\to \everyheadsynchronization
+
+\installshipoutmethod{overviewpage}\overviewpage_save_page
+
+\unexpanded\def\overviewpage_setup_head#1%
+  {\setuphead[#1][option:overviewpage=\v!yes]}
+
+\appendtoks
+    \processcommacommand
+      [\moduleparameter{overviewpage}\c!level]
+      \overviewpage_setup_head
+\to \everysetupmodule
+
+\setuppaper
+  [\c!method=overviewpage]
+
+\definelistalternative
+  [overviewpage]
+  [\c!renderingsetup=\??listrenderings:overview]
+
+\setuplistalternative
+  [overviewpage]
+  [\c!before=\dontleavehmode,
+   \c!after=\hskip\zeropoint\relax,
+ % \c!width=\ctxlua{moduledata.overviewpage.calculatedwidth(\listlength)}]
+   \c!width=\ctxlua{moduledata.overviewpage.calculatedwidth(structures.lists.size())}]
+
+\startsetups[\??listrenderings:overview]
+    \doifboxelse{\????overviewpage}{\structurelistrealpagenumber}
+       {\listalternativeparameter\c!before
+        \startcurrentlistentrywrapper
+          \scale
+            [\c!width=\listalternativeparameter\c!width]
+            {\foundbox{\????overviewpage}{\structurelistrealpagenumber}}%
+        \stopcurrentlistentrywrapper
+        \listalternativeparameter\c!after}
+       {}%
+\stopsetups
+
+\definemakeup
+  [overviewpage]
+  [\c!align=\v!middle]
+
+\definelayout
+  [overviewpage]
+  [\v!page]
+
+\startluacode
+    moduledata              = moduledata              or { }
+    moduledata.overviewpage = moduledata.overviewpage or { }
+
+    function moduledata.overviewpage.calculatedwidth(pages)
+        context("%f\\textwidth",1/math.ceil(math.sqrt(pages)))
+    end
+\stopluacode
+
+\definecombinedlist
+    [overviewpage]
+    [
+      \c!list=\moduleparameter{overviewpage}\c!level,
+      \c!before=\startoverviewpagemakeup,
+      \c!after=\stopoverviewpagemakeup,
+      \c!criterium=\v!all,
+      \c!alternative=overviewpage,
+    ]
+
+\unexpanded\def\placeoverviewpage
+  {\startoverviewpagemakeup
+    % \determinelistcharacteristics
+    %   [\moduleparameter{overviewpage}\c!level]
+    %   [\c!criterium=\v!all]
+      \placelist
+        [\moduleparameter{overviewpage}\c!level]
+        [\c!criterium=\v!all,
+         \c!alternative=overviewpage]
+   \stopoverviewpagemakeup}
+
+\protect
+
+\stopmodule
+
+\continueifinputfile{t-overviewpage.mkiv}
+
+\setupmodule[overviewpage][level=section] % we already loaded the module
+
+\setupinteraction
+  [state=start]
+
+\setuppapersize
+  [S4]
+
+\setuphead
+  [section]
+  [page=yes]
+
+%  before=\saveoverviewpage
+
+% \enablemode[toggle]
+
+\starttext
+
+\dorecurse {2} {
+    \startchapter[title={Chapter #1}]
+
+        \startmode[toggle]
+            \setuphead
+              [section]
+              [option:overviewpage=yes]
+        \stopmode
+
+        \dorecurse {4} {
+            \startsection[title={Section ##1a}]
+                \dorecurse {3} {
+                    \input knuth \par
+                }
+            \stopsection
+        }
+
+        \startmode[toggle]
+            \setuphead
+              [section]
+              [option:overviewpage=no]
+        \stopmode
+
+        \dorecurse {4} {
+            \startsection[title={Section ##1b}]
+                \dorecurse {3} {
+                    \input knuth \par
+                }
+            \stopsection
+        }
+
+    \stopchapter
+}
+
+\placeoverviewpage
+
+\stoptext
