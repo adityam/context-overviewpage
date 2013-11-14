@@ -1,0 +1,29 @@
+\usemodule[overviewpage][level=section]
+
+\setupinteraction
+  [state=start]
+
+\setuppapersize
+  [S4]
+
+\setuphead
+  [section]
+  [page=yes]
+
+\starttext
+
+\startchapter[title={Chapter 1}]
+
+    \dorecurse {4} {
+    \startsection[title={Section #1a}]
+      \input ward \par
+      \input knuth \par
+    \stopsection
+    }
+
+\stopchapter
+
+\placeoverviewpage
+
+\stoptext
+
