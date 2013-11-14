@@ -101,25 +101,26 @@
     end
 \stopluacode
 
+% Ideally, we would like to simply use the definition below. 
+% However, the `before` and `after` keys are not used with `\placecombinedlist`. 
+% Therefore we use a more manual solution.
+%
 \definecombinedlist
     [overviewpage]
+    [\moduleparameter{overviewpage}\c!level]
     [
-      \c!list=\moduleparameter{overviewpage}\c!level,
-      \c!before=\startoverviewpagemakeup,
-      \c!after=\stopoverviewpagemakeup,
+      %\c!before=\startoverviewpagemakeup,
+      %\c!after=\stopoverviewpagemakeup,
       \c!criterium=\v!all,
       \c!alternative=overviewpage,
     ]
 
 \unexpanded\def\placeoverviewpage
+  {\dosingleargument\doplaceoverviewpage}
+
+\def\doplaceoverviewpage[#1]%
   {\startoverviewpagemakeup
-    % \determinelistcharacteristics
-    %   [\moduleparameter{overviewpage}\c!level]
-    %   [\c!criterium=\v!all]
-      \placelist
-        [\moduleparameter{overviewpage}\c!level]
-        [\c!criterium=\v!all,
-         \c!alternative=overviewpage]
+      \placecombinedlist[overviewpage][#1]
    \stopoverviewpagemakeup}
 
 \protect
