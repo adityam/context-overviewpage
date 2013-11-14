@@ -11,9 +11,6 @@
 
 \writestatus{loading}{Overview Page (ver: 2013.08.31)}
 
-% alternatively, when we bind only to sections we could check for a system state
-% *sectionname but that is less flexible
-
 \startmodule [overviewpage]
 
 \unprotect
@@ -128,61 +125,3 @@
 \protect
 
 \stopmodule
-
-\continueifinputfile{t-overviewpage.mkiv}
-
-\setupmodule[overviewpage][level=section] % we already loaded the module
-
-\setupinteraction
-  [state=start]
-
-\setuppapersize
-  [S4]
-
-\setuphead
-  [section]
-  [page=yes]
-
-%  before=\saveoverviewpage
-
-% \enablemode[toggle]
-
-\starttext
-
-\dorecurse {2} {
-    \startchapter[title={Chapter #1}]
-
-        \startmode[toggle]
-            \setuphead
-              [section]
-              [option:overviewpage=yes]
-        \stopmode
-
-        \dorecurse {4} {
-            \startsection[title={Section ##1a}]
-                \dorecurse {3} {
-                    \input knuth \par
-                }
-            \stopsection
-        }
-
-        \startmode[toggle]
-            \setuphead
-              [section]
-              [option:overviewpage=no]
-        \stopmode
-
-        \dorecurse {4} {
-            \startsection[title={Section ##1b}]
-                \dorecurse {3} {
-                    \input knuth \par
-                }
-            \stopsection
-        }
-
-    \stopchapter
-}
-
-\placeoverviewpage
-
-\stoptext
