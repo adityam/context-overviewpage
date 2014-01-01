@@ -1,27 +1,73 @@
+\setupinteraction[state=start]
+
+% Minimalistic subsection layout
+\setuppapersize[S4]
+\setupwhitespace[medium]
+\setuphead[section, subsection][color=blue, page=yes]
+
+\setupbodyfont[dejavu, sans, 12pt]
+
 \usemodule[overviewpage][level=section]
 
-\setupinteraction
-  [state=start]
-
-\setuppapersize
-  [S4]
-
-\setuphead
-  [section]
-  [page=yes]
+% Filler text
+\startbuffer[subsection]
+  \startsubsection[title={Some random bullet points}]
+    \startitemize
+      \item First point
+      \item Second point
+      \item Third point
+      \item And so on \unknown
+    \stopitemize
+  \stopsubsection
+\stopbuffer
 
 \starttext
 
-\startchapter[title={Chapter 1}]
+\startsection[title={First topic in the presentation}]
 
-    \dorecurse {4} {
-    \startsection[title={Section #1a}]
-      \input ward \par
-      \input knuth \par
-    \stopsection
-    }
+  \startplacefigure[location={here,nonumber}, title={A cute cat}]
+    \externalfigure[http://placekitten.com/g/800/300][method=jpg, width=0.7\textwidth]
+  \stopplacefigure
 
-\stopchapter
+  According to the above layout, a topic consists of multiple subsections. Think of
+  it as a \type{section} in \type{beamer}. 
+
+  \dorecurse{4}{\getbuffer[subsection]}
+
+\stopsection
+
+\startsection[title={Second topic in the presentation}]
+  \startplacefigure[location={here,nonumber}, title={A cute cat}]
+    \externalfigure[http://placekitten.com/g/800/350][method=jpg, width=0.7\textwidth]
+  \stopplacefigure
+
+  Another topic and some random stuff to explain about this topic. 
+
+  \dorecurse{4}{\getbuffer[subsection]}
+
+\stopsection
+
+\startsection[title={Third topic in the presentation}]
+  \startplacefigure[location={here,nonumber}, title={A cute cat}]
+    \externalfigure[http://placekitten.com/g/800/380][method=jpg, width=0.7\textwidth]
+  \stopplacefigure
+
+  Another topic and some random stuff to explain about this topic. 
+
+  \dorecurse{4}{\getbuffer[subsection]}
+
+\stopsection
+
+\startsection[title={Fourth topic in the presentation}]
+  \startplacefigure[location={here,nonumber}, title={A cute cat}]
+    \externalfigure[http://placekitten.com/g/800/325][method=jpg, width=0.7\textwidth]
+  \stopplacefigure
+
+  Another topic and some random stuff to explain about this topic. 
+
+  \dorecurse{4}{\getbuffer[subsection]}
+
+\stopsection
 
 \placeoverviewpage
 
