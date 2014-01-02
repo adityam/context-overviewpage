@@ -1,73 +1,77 @@
 \setupinteraction[state=start]
 
-% Minimalistic subsection layout
+% Minimalistic slide layout
 \setuppapersize[S4]
 \setupwhitespace[medium]
-\setuphead[section, subsection][color=blue, page=yes]
+\definehead[topic][section][numbercommand=\gobbleoneargument]
+\definehead[slide][subsection][numbercommand=\gobbleoneargument]
+
+\setuphead[topic][color=blue, page=yes]
+\setuphead[slide][color=red,  page=yes]
 
 \setupbodyfont[dejavu, sans, 12pt]
 
-\usemodule[overviewpage][level=section]
+\usemodule[overviewpage][level=topic]
 
 % Filler text
-\startbuffer[subsection]
-  \startsubsection[title={Some random bullet points}]
+\startbuffer[slide]
+  \startslide[title={Some random bullet points}]
     \startitemize
       \item First point
       \item Second point
       \item Third point
       \item And so on \unknown
     \stopitemize
-  \stopsubsection
+  \stopslide
 \stopbuffer
 
 \starttext
 
-\startsection[title={First topic in the presentation}]
+\starttopic[title={First topic in the presentation}]
 
   \startplacefigure[location={here,nonumber}, title={A cute cat}]
     \externalfigure[http://placekitten.com/g/800/300][method=jpg, width=0.7\textwidth]
   \stopplacefigure
 
-  According to the above layout, a topic consists of multiple subsections. Think of
-  it as a \type{section} in \type{beamer}. 
+  According to the above layout, a topic consists of multiple slides. Think of
+  it as a \type{topic} in \type{beamer}. 
 
-  \dorecurse{4}{\getbuffer[subsection]}
+  \dorecurse{4}{\getbuffer[slide]}
 
-\stopsection
+\stoptopic
 
-\startsection[title={Second topic in the presentation}]
+\starttopic[title={Second topic in the presentation}]
   \startplacefigure[location={here,nonumber}, title={A cute cat}]
     \externalfigure[http://placekitten.com/g/800/350][method=jpg, width=0.7\textwidth]
   \stopplacefigure
 
   Another topic and some random stuff to explain about this topic. 
 
-  \dorecurse{4}{\getbuffer[subsection]}
+  \dorecurse{4}{\getbuffer[slide]}
 
-\stopsection
+\stoptopic
 
-\startsection[title={Third topic in the presentation}]
+\starttopic[title={Third topic in the presentation}]
   \startplacefigure[location={here,nonumber}, title={A cute cat}]
     \externalfigure[http://placekitten.com/g/800/380][method=jpg, width=0.7\textwidth]
   \stopplacefigure
 
   Another topic and some random stuff to explain about this topic. 
 
-  \dorecurse{4}{\getbuffer[subsection]}
+  \dorecurse{4}{\getbuffer[slide]}
 
-\stopsection
+\stoptopic
 
-\startsection[title={Fourth topic in the presentation}]
+\starttopic[title={Fourth topic in the presentation}]
   \startplacefigure[location={here,nonumber}, title={A cute cat}]
     \externalfigure[http://placekitten.com/g/800/325][method=jpg, width=0.7\textwidth]
   \stopplacefigure
 
   Another topic and some random stuff to explain about this topic. 
 
-  \dorecurse{4}{\getbuffer[subsection]}
+  \dorecurse{4}{\getbuffer[slide]}
 
-\stopsection
+\stoptopic
 
 \placeoverviewpage
 
