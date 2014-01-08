@@ -1,0 +1,79 @@
+\setupinteraction[state=start]
+
+% Minimalistic slide layout
+\setuppapersize[S4]
+\setupwhitespace[medium]
+\definehead[topic][section][numbercommand=\gobbleoneargument]
+\definehead[slide][subsection][numbercommand=\gobbleoneargument]
+
+\setuphead[topic][color=blue, page=yes]
+\setuphead[slide][color=red,  page=yes]
+
+\setupbodyfont[dejavu, sans, 12pt]
+
+\usemodule[overviewpage][level=topic]
+
+% Filler text
+\startbuffer[slide]
+  \startslide[title={Some random bullet points}]
+    \startitemize
+      \item First point
+      \item Second point
+      \item Third point
+      \item And so on \unknown
+    \stopitemize
+  \stopslide
+\stopbuffer
+
+\starttext
+
+\starttopic[title={First topic in the presentation}]
+
+  \startplacefigure[location={here,nonumber}, title={A cute cat}]
+    \externalfigure[http://placekitten.com/g/800/300][method=jpg, width=0.7\textwidth]
+  \stopplacefigure
+
+  According to the above layout, a topic consists of multiple slides. Think of
+  it as a \type{topic} in \type{beamer}. 
+
+  \dorecurse{4}{\getbuffer[slide]}
+
+\stoptopic
+
+\starttopic[title={Second topic in the presentation}]
+  \startplacefigure[location={here,nonumber}, title={A cute cat}]
+    \externalfigure[http://placekitten.com/g/800/350][method=jpg, width=0.7\textwidth]
+  \stopplacefigure
+
+  Another topic and some random stuff to explain about this topic. 
+
+  \dorecurse{4}{\getbuffer[slide]}
+
+\stoptopic
+
+\starttopic[title={Third topic in the presentation}]
+  \startplacefigure[location={here,nonumber}, title={A cute cat}]
+    \externalfigure[http://placekitten.com/g/800/380][method=jpg, width=0.7\textwidth]
+  \stopplacefigure
+
+  Another topic and some random stuff to explain about this topic. 
+
+  \dorecurse{4}{\getbuffer[slide]}
+
+\stoptopic
+
+\starttopic[title={Fourth topic in the presentation}]
+  \startplacefigure[location={here,nonumber}, title={A cute cat}]
+    \externalfigure[http://placekitten.com/g/800/325][method=jpg, width=0.7\textwidth]
+  \stopplacefigure
+
+  Another topic and some random stuff to explain about this topic. 
+
+  \dorecurse{4}{\getbuffer[slide]}
+
+\stoptopic
+
+\placeoverviewpage
+
+\stoptext
+

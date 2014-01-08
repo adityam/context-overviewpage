@@ -1,6 +1,6 @@
 %D \module
 %D   [     file=t-overviewpage,
-%D      version=2013.08.31,
+%D      version=2014.01.08,
 %D        title=\CONTEXT\ User Module,
 %D     subtitle=Page Overviews,
 %D       author=Aditya Mahajan and Hans Hagen,
@@ -9,10 +9,7 @@
 %D        email=adityam <at> ieee <dot> org,
 %D      license=Simplified BSD License]
 
-\writestatus{loading}{Overview Page (ver: 2013.08.31)}
-
-% alternatively, when we bind only to sections we could check for a system state
-% *sectionname but that is less flexible
+\writestatus{loading}{Overview Page (ver: 2014.01.08)}
 
 \startmodule [overviewpage]
 
@@ -58,6 +55,9 @@
       \overviewpage_setup_head
 \to \everysetupmodule
 
+
+\the\everysetupmodule
+
 \setuppaper
   [\c!method=overviewpage]
 
@@ -101,85 +101,28 @@
     end
 \stopluacode
 
+% Ideally, we would like to simply use the definition below. 
+% However, the `before` and `after` keys are not used with `\placecombinedlist`. 
+% Therefore we use a more manual solution.
+%
 \definecombinedlist
     [overviewpage]
+    [\moduleparameter{overviewpage}\c!level]
     [
-      \c!list=\moduleparameter{overviewpage}\c!level,
-      \c!before=\startoverviewpagemakeup,
-      \c!after=\stopoverviewpagemakeup,
+      %\c!before=\startoverviewpagemakeup,
+      %\c!after=\stopoverviewpagemakeup,
       \c!criterium=\v!all,
       \c!alternative=overviewpage,
     ]
 
 \unexpanded\def\placeoverviewpage
+  {\dosingleargument\doplaceoverviewpage}
+
+\def\doplaceoverviewpage[#1]%
   {\startoverviewpagemakeup
-    % \determinelistcharacteristics
-    %   [\moduleparameter{overviewpage}\c!level]
-    %   [\c!criterium=\v!all]
-      \placelist
-        [\moduleparameter{overviewpage}\c!level]
-        [\c!criterium=\v!all,
-         \c!alternative=overviewpage]
+      \placecombinedlist[overviewpage][#1]
    \stopoverviewpagemakeup}
 
 \protect
 
 \stopmodule
-
-\continueifinputfile{t-overviewpage.mkiv}
-
-\setupmodule[overviewpage][level=section] % we already loaded the module
-
-\setupinteraction
-  [state=start]
-
-\setuppapersize
-  [S4]
-
-\setuphead
-  [section]
-  [page=yes]
-
-%  before=\saveoverviewpage
-
-% \enablemode[toggle]
-
-\starttext
-
-\dorecurse {2} {
-    \startchapter[title={Chapter #1}]
-
-        \startmode[toggle]
-            \setuphead
-              [section]
-              [option:overviewpage=yes]
-        \stopmode
-
-        \dorecurse {4} {
-            \startsection[title={Section ##1a}]
-                \dorecurse {3} {
-                    \input knuth \par
-                }
-            \stopsection
-        }
-
-        \startmode[toggle]
-            \setuphead
-              [section]
-              [option:overviewpage=no]
-        \stopmode
-
-        \dorecurse {4} {
-            \startsection[title={Section ##1b}]
-                \dorecurse {3} {
-                    \input knuth \par
-                }
-            \stopsection
-        }
-
-    \stopchapter
-}
-
-\placeoverviewpage
-
-\stoptext
