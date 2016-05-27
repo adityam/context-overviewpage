@@ -1,6 +1,6 @@
 %D \module
 %D   [     file=t-overviewpage,
-%D      version=2014.01.08,
+%D      version=2016.05.27,
 %D        title=\CONTEXT\ User Module,
 %D     subtitle=Page Overviews,
 %D       author=Aditya Mahajan and Hans Hagen,
@@ -9,7 +9,7 @@
 %D        email=adityam <at> ieee <dot> org,
 %D      license=Simplified BSD License]
 
-\writestatus{loading}{Overview Page (ver: 2014.01.08)}
+\writestatus{loading}{Overview Page (ver: 2016.05.27)}
 
 \startmodule [overviewpage]
 
@@ -24,8 +24,18 @@
 
 \newconditional\c_overviewpage_state
 
-\unexpanded\def\saveoverviewpage
+\unexpanded\def\enablesaveoverviewpage
   {\global\settrue\c_overviewpage_state}
+
+\unexpanded\def\saveoverviewpage#1%
+  {\enablesaveoverviewpage
+   \setevalue{\????overviewpage:page:#1}{\the\realpageno}}
+
+\unexpanded\def\useoverviewpage#1%
+  {\writestatus{overviewpage}{using page #1 (\getvalue{\????overviewpage:page:#1})}%
+   \gotopage
+       {\foundbox{\????overviewpage}{\getvalue{\????overviewpage:page:#1}}}
+       [\getvalue{\????overviewpage:page:#1}]}
 
 \unexpanded\def\overviewpage_save_page#1%
   {\ifconditional\c_overviewpage_state
@@ -41,7 +51,7 @@
    \fi}
 
 \appendtoks
-    \doif {\headparameter{option:overviewpage}} \v!yes \saveoverviewpage
+    \doif {\headparameter{option:overviewpage}} \v!yes \enablesaveoverviewpage
 \to \everyheadsynchronization
 
 \installshipoutmethod{overviewpage}\overviewpage_save_page
