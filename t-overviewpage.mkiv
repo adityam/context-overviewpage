@@ -1,6 +1,6 @@
 %D \module
 %D   [     file=t-overviewpage,
-%D      version=2016.05.27,
+%D      version=2016.06.17,
 %D        title=\CONTEXT\ User Module,
 %D     subtitle=Page Overviews,
 %D       author=Aditya Mahajan and Hans Hagen,
@@ -9,7 +9,7 @@
 %D        email=adityam <at> ieee <dot> org,
 %D      license=Simplified BSD License]
 
-\writestatus{loading}{Overview Page (ver: 2016.05.27)}
+\writestatus{loading}{Overview Page (ver: 2016.06.17)}
 
 \startmodule [overviewpage]
 
@@ -29,7 +29,7 @@
 
 \unexpanded\def\saveoverviewpage#1%
   {\enablesaveoverviewpage
-   \setevalue{\????overviewpage:page:#1}{\the\realpageno}}
+   \setxvalue{\????overviewpage:page:#1}{\the\realpageno}}
 
 \unexpanded\def\useoverviewpage#1%
   {\writestatus{overviewpage}{using page #1 (\getvalue{\????overviewpage:page:#1})}%
