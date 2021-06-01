@@ -23,12 +23,22 @@
 \initializeboxstack{\????overviewpage}
 
 \newconditional\c_overviewpage_state
+\newconditional\c_overviewpage_shipout
 
 \unexpanded\def\enablesaveoverviewpage
-  {\global\settrue\c_overviewpage_state}
+  {\global\settrue\c_overviewpage_state
+   \global\settrue\c_overviewpage_shipout}
+
+\unexpanded\def\enableonlyoverviewpage
+  {\global\settrue\c_overviewpage_state
+   \global\setfalse\c_overviewpage_shipout}
 
 \unexpanded\def\saveoverviewpage#1%
   {\enablesaveoverviewpage
+   \setxvalue{\????overviewpage:page:#1}{\the\realpageno}}
+
+\unexpanded\def\saveonlyoverviewpage#1%
+  {\enableonlyoverviewpage
    \setxvalue{\????overviewpage:page:#1}{\the\realpageno}}
 
 \unexpanded\def\useoverviewpage#1%
@@ -45,13 +55,15 @@
      \writestatus{overviewpage}{saving overviewpage \the\realpageno}%
      \savebox{\????overviewpage}{\the\realpageno}{\box\scratchbox}%
      \global\setfalse\c_overviewpage_state
-     \page_shipouts_normal{\box\nextbox}%
+     \ifconditional\c_overviewpage_shipout
+         \page_shipouts_normal{\box\nextbox}%
+     \fi
    \else
      \page_shipouts_normal{#1}%
    \fi}
 
 \appendtoks
-    \doif {\headparameter{option:overviewpage}} \v!yes \enablesaveoverviewpage
+    \doif {\headparameter{option:overviewpage}} \v!yes  \enablesaveoverviewpage
 \to \everyheadsynchronization
 
 \installshipoutmethod{overviewpage}\overviewpage_save_page
@@ -79,7 +91,7 @@
   [overviewpage]
   [\c!before=\dontleavehmode,
    \c!after=\hskip\zeropoint\relax,
- % \c!width=\ctxlua{moduledata.overviewpage.calculatedwidth(\listlength)}]
+   % \c!width=\ctxlua{moduledata.overviewpage.calculatedwidth(\listlength)}]
    \c!width=\ctxlua{moduledata.overviewpage.calculatedwidth(structures.lists.size())}]
 
 \startsetups[\??listrenderings:overview]
